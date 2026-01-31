@@ -1,14 +1,10 @@
 {
   "name": "ticket",
-  "version": "1.0.0",
-  "description": "Durable project planning with file-based tickets for multi-session agent workflows",
+  "version": "1.1.0",
+  "description": "Durable project planning with file-based tickets for multi-session agent workflows. Installs the tk CLI for use via bash.",
   "author": "alexcabrera",
   "repository": "https://github.com/alexcabrera/ayo-plugins-ticket",
-  "tools": ["ticket"],
   "skills": ["ticket-planning"],
-  "default_tools": {
-    "plan": "ticket"
-  },
   "dependencies": {
     "binaries": []
   },

@@ -4,7 +4,7 @@ Durable project planning plugin for [ayo](https://github.com/alexcabrera/ayo) us
 
 ## Credits
 
-This plugin bundles and installs [ticket](https://github.com/wedow/ticket) (`tk`), a minimal ticket system with dependency tracking. The `tk` CLI is vendored in this plugin and automatically symlinked to `~/.local/bin/` during installation.
+This plugin bundles and installs [ticket](https://github.com/wedow/ticket) (`tk`), a minimal ticket system with dependency tracking designed for AI agents. The `tk` CLI is vendored in this plugin and automatically symlinked to `~/.local/bin/` during installation.
 
 ## Installation
 
@@ -15,90 +15,90 @@ ayo plugins install https://github.com/alexcabrera/ayo-plugins-ticket
 This will:
 1. Install the plugin to `~/.local/share/ayo/plugins/ticket/`
 2. Install the `tk` CLI to `~/.local/bin/` (via symlink)
-3. Add a `ticket-planning` skill for agents using this plugin
-4. Prompt to set `ticket` as the default for the `plan` tool category
+3. Add the `ticket-planning` skill to all agents
 
 ## Usage
 
-### Configure as Default Plan Tool
+The plugin provides the `ticket-planning` skill which teaches agents how to use `tk` via bash for durable project planning. Agents use `tk` directly through the bash tool - no special tool wrapper needed.
 
-After installation, add to `~/.config/ayo/ayo.json`:
+### How Agents Use tk
 
-```json
-{
-  "default_tools": {
-    "plan": "ticket"
-  }
-}
-```
-
-### Agent Configuration
-
-Agents that need durable planning should include `plan` in their allowed tools:
-
-```json
-{
-  "allowed_tools": ["bash", "plan"]
-}
-```
-
-The `ticket-planning` skill is automatically available to all agents once the plugin is installed.
-
-## How It Works
-
-The plugin provides the `ticket` tool which wraps the [tk CLI](https://github.com/wedow/ticket). Tickets are stored as markdown files with YAML frontmatter in a `.tickets/` directory at your project root.
-
-### Todo vs Ticket
-
-| Aspect | Todo | Ticket |
-|--------|------|--------|
-| Scope | Session | Project |
-| Storage | SQLite (ephemeral) | Files (durable) |
-| Survives context handoff | No | Yes |
-| Dependencies | No | Yes |
-| Use case | Immediate micro-tasks | Project planning |
-
-### Workflow Example
+Agents with bash access can use tk commands directly:
 
 ```bash
-# Agent creates tickets for a feature
-tk create "User authentication" -t epic --tags auth
+# Create tickets
+tk create "Implement user auth" -t epic -d "Add authentication system"
 
-# Break into dependent tasks
-tk create "Design auth flow" --parent auth-123
-tk create "Implement JWT" --parent auth-123
-tk create "Add OAuth" --parent auth-123 -d "Depends on JWT"
-tk dep oauth-id jwt-id
+# Break into sub-tasks
+tk create "Design auth flow" --parent <epic-id>
+tk create "Implement JWT handling" --parent <epic-id>
+
+# Set dependencies
+tk dep <child-id> <parent-id>
 
 # Track progress
-tk start jwt-id
-tk add-note jwt-id "Using RS256 for signing"
-tk close jwt-id
+tk start <id>
+tk add-note <id> "Using RS256 signing"
+tk close <id>
 
-# See what's unblocked
-tk ready  # OAuth now appears
+# Check status
+tk ls           # List open tickets
+tk ready        # Show unblocked tickets
+tk blocked      # Show blocked tickets
 ```
 
-### Commands
+### The Two-Tier Planning System
 
-| Command | Description |
-|---------|-------------|
-| `tk create [title]` | Create a ticket |
-| `tk start <id>` | Set status to in_progress |
-| `tk close <id>` | Set status to closed |
-| `tk ls` | List open/in-progress tickets |
-| `tk ready` | List tickets with resolved deps |
-| `tk blocked` | List tickets with unresolved deps |
-| `tk show <id>` | Display ticket details |
-| `tk dep <id> <dep-id>` | Add dependency |
-| `tk add-note <id> [text]` | Append timestamped note |
+This plugin works alongside ayo's built-in `todo` tool:
 
-See `tk --help` for full command reference.
+| Tool | Scope | Storage | Purpose |
+|------|-------|---------|---------|
+| `todo` | Session | SQLite | Track immediate execution steps |
+| `tk` | Project | Files | Track work across sessions |
+
+**Use both together**: Tickets define *what* to accomplish; todos track *how* you're doing it right now.
+
+## Autonomous Multi-Hour Execution
+
+The `ticket-planning` skill teaches agents to:
+
+1. **Orient** - Check `tk ready` and `tk ls` at session start
+2. **Plan** - Break epics into tickets with dependencies
+3. **Execute** - Work on one ticket at a time, using todos for micro-steps
+4. **Document** - Add notes with `tk add-note` for context handoff
+5. **Complete** - Close tickets and move to next ready work
+
+See the skill documentation for detailed patterns.
+
+## Ticket File Format
+
+Tickets are stored as markdown in `.tickets/`:
+
+```markdown
+---
+id: proj-a1b2
+title: Implement JWT tokens
+status: in_progress
+type: task
+depends_on:
+  - proj-design
+---
+
+## Description
+
+Implement JWT token generation and validation.
+
+## Notes
+
+### 2025-01-31T14:30:00Z
+Using RS256 signing. Keys in env vars.
+```
 
 ## Requirements
 
 - ayo >= 0.2.0
 - bash
+- `~/.local/bin` in PATH (for tk access)
 
 ## License
 
