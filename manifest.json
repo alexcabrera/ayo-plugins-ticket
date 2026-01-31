@@ -1,0 +1,16 @@
+{
+  "name": "ticket",
+  "version": "1.0.0",
+  "description": "Durable project planning with file-based tickets for multi-session agent workflows",
+  "author": "alexcabrera",
+  "repository": "https://github.com/alexcabrera/ayo-plugins-ticket",
+  "tools": ["ticket"],
+  "default_tools": {
+    "plan": "ticket"
+  },
+  "dependencies": {
+    "binaries": ["tk"]
+  },
+  "post_install": "scripts/post-install.sh",
+  "ayo_version": ">=0.2.0"
+}

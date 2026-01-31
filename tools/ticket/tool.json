@@ -1,0 +1,29 @@
+{
+  "name": "ticket",
+  "description": "Durable project planning with file-based tickets. Use for project-level tasks that need to persist across sessions and context handoffs. Tickets are stored as markdown files in .tickets/ directory.",
+  "command": "tk",
+  "parameters": [
+    {
+      "name": "command",
+      "description": "The ticket command to run: create, start, close, reopen, status, dep, undep, link, unlink, ls, list, ready, blocked, closed, show, edit, add-note, query, dep tree, dep cycle",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "args",
+      "description": "Arguments for the command. For 'create': title string. For 'start/close/reopen/show': ticket ID. For 'status': ticket ID and status. For 'dep/undep': ticket ID and dependency ID. For 'ls/list': optional filters like --status=open. Use partial ID matching.",
+      "type": "string",
+      "required": false
+    },
+    {
+      "name": "options",
+      "description": "Additional options as a single string. For 'create': -d 'description' -t type -p priority --tags tag1,tag2. For 'ls': --status=X -a assignee -T type. For 'closed': --limit=N",
+      "type": "string",
+      "required": false
+    }
+  ],
+  "timeout": 30,
+  "working_dir": "inherit",
+  "depends_on": [],
+  "spinner_style": "default"
+}
