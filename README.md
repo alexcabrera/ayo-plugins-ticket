@@ -2,6 +2,10 @@
 
 Durable project planning plugin for [ayo](https://github.com/alexcabrera/ayo) using file-based tickets. Enables multi-session agent workflows where project state persists across context handoffs.
 
+## Credits
+
+This plugin bundles and installs [ticket](https://github.com/wedow/ticket) (`tk`), a minimal ticket system with dependency tracking. The `tk` CLI is vendored in this plugin and automatically symlinked to `~/.local/bin/` during installation.
+
 ## Installation
 
 ```bash
@@ -10,8 +14,9 @@ ayo plugins install https://github.com/alexcabrera/ayo-plugins-ticket
 
 This will:
 1. Install the plugin to `~/.local/share/ayo/plugins/ticket/`
-2. Create a symlink for `tk` in `~/.local/bin/`
-3. Prompt to set `ticket` as the default for the `plan` tool category
+2. Install the `tk` CLI to `~/.local/bin/` (via symlink)
+3. Add a `ticket-planning` skill for agents using this plugin
+4. Prompt to set `ticket` as the default for the `plan` tool category
 
 ## Usage
 
@@ -37,9 +42,11 @@ Agents that need durable planning should include `plan` in their allowed tools:
 }
 ```
 
+The `ticket-planning` skill is automatically available to all agents once the plugin is installed.
+
 ## How It Works
 
-The plugin provides the `ticket` tool which wraps the `tk` CLI. Tickets are stored as markdown files with YAML frontmatter in a `.tickets/` directory at your project root.
+The plugin provides the `ticket` tool which wraps the [tk CLI](https://github.com/wedow/ticket). Tickets are stored as markdown files with YAML frontmatter in a `.tickets/` directory at your project root.
 
 ### Todo vs Ticket
 
@@ -96,3 +103,5 @@ See `tk --help` for full command reference.
 ## License
 
 MIT
+
+The bundled `tk` CLI is from [ticket](https://github.com/wedow/ticket).

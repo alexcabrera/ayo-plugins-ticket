@@ -5,11 +5,12 @@
   "author": "alexcabrera",
   "repository": "https://github.com/alexcabrera/ayo-plugins-ticket",
   "tools": ["ticket"],
+  "skills": ["ticket-planning"],
   "default_tools": {
     "plan": "ticket"
   },
   "dependencies": {
-    "binaries": ["tk"]
+    "binaries": []
   },
   "post_install": "scripts/post-install.sh",
   "ayo_version": ">=0.2.0"
