@@ -1,25 +1,40 @@
 {
   "name": "ticket",
-  "description": "Durable project planning with file-based tickets. Use for project-level tasks that need to persist across sessions and context handoffs. Tickets are stored as markdown files in .tickets/ directory.",
-  "command": "tk",
+  "description": "Durable project planning with file-based tickets stored in .tickets/. Use for work spanning multiple sessions. Tickets persist across context handoffs and enable dependency tracking between tasks.",
+  "command": "sh",
+  "args": ["-c", "tk {{command}} {{arg1}} {{arg2}} {{arg3}} {{arg4}} {{arg5}}"],
   "parameters": [
     {
       "name": "command",
-      "description": "The ticket command to run: create, start, close, reopen, status, dep, undep, link, unlink, ls, list, ready, blocked, closed, show, edit, add-note, query, dep tree, dep cycle",
+      "description": "The tk command: create (new ticket), start (begin work), close (complete), ls (list open), ready (show unblocked), blocked (show blocked), show (display ticket), dep (add dependency), add-note (append note)",
       "type": "string",
-      "required": true
+      "required": true,
+      "enum": ["create", "start", "close", "reopen", "status", "ls", "list", "ready", "blocked", "closed", "show", "add-note", "dep", "undep", "link", "unlink", "query", "help"]
     },
     {
-      "name": "args",
-      "description": "Arguments for the command. For 'create': title string. For 'start/close/reopen/show': ticket ID. For 'status': ticket ID and status. For 'dep/undep': ticket ID and dependency ID. For 'ls/list': optional filters like --status=open. Use partial ID matching.",
-      "type": "string",
-      "required": false
+      "name": "arg1",
+      "description": "First argument. For 'create': quoted title. For 'start/close/show': ticket ID. For 'dep': ticket that depends. For 'add-note': ticket ID.",
+      "type": "string"
     },
     {
-      "name": "options",
-      "description": "Additional options as a single string. For 'create': -d 'description' -t type -p priority --tags tag1,tag2. For 'ls': --status=X -a assignee -T type. For 'closed': --limit=N",
-      "type": "string",
-      "required": false
+      "name": "arg2", 
+      "description": "Second argument. For 'create': -d 'description' or -t type. For 'dep': the dependency ID. For 'add-note': quoted note text.",
+      "type": "string"
+    },
+    {
+      "name": "arg3",
+      "description": "Third argument. For 'create': additional flag like -t task or -p 1.",
+      "type": "string"
+    },
+    {
+      "name": "arg4",
+      "description": "Fourth argument. For 'create': additional flag like --tags auth,api.",
+      "type": "string"
+    },
+    {
+      "name": "arg5",
+      "description": "Fifth argument. For 'create': additional flag like --parent epic-id.",
+      "type": "string"
     }
   ],
   "timeout": 30,
